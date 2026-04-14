@@ -27,10 +27,14 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install TIRA CLI
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip3 install tira
+          pip3 install tira huggingface-hub
+
+      - name: Login to HuggingFace
+        run: |
+          huggingface-cli login --token ${{ secrets.HF_TOKEN }} --add-to-git-credentials
 
       - name: Build, test, and upload
         env:
