@@ -9,7 +9,4 @@ RUN pip install --no-cache-dir -q -r requirements.txt
 
 COPY script.py .
 
-ENV GROQ_API_KEY=""
-ENV HF_TOKEN=""
-
 ENTRYPOINT ["python", "script.py"]
