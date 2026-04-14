@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       directory:
-        description: 'Directory containing submission (. for root)'
+        description: 'Directory containing submission'
         required: true
         default: '.'
 
@@ -39,4 +39,4 @@ jobs:
           tira-cli code-submission \
             --path ${{ inputs.directory }} \
             --task rag4reports \
-            --dataset rag4reports/task-a-report-evaluation-20260209-training
+            --dataset rag4reports/task-b-automatic-report-generation-20260209-training
