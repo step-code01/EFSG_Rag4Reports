@@ -584,14 +584,17 @@ class EFSGPipeline:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(prog="efsg-submission")
-    parser.add_argument("-i", "--input", required=True, help="Input dir with report-requests.jsonl")
-    parser.add_argument("-o", "--output", required=True, help="Output dir for run.jsonl")
+    parser.add_argument("-i", "--input", required=False, help="Input dir with report-requests.jsonl")
+    parser.add_argument("-o", "--output", required=False, help="Output dir for run.jsonl")
     return parser.parse_args()
 
 def main():
     args = parse_args()
-    input_dir = Path(args.input)
-    output_dir = Path(args.output)
+    
+    # Handle TIRA's default paths if args not provided
+    input_dir = Path(args.input) if args.input else Path('/input')
+    output_dir = Path(args.output) if args.output else Path('/output')
+    
     output_dir.mkdir(parents=True, exist_ok=True)
 
     input_file = input_dir / 'report-requests.jsonl'
@@ -599,9 +602,14 @@ def main():
 
     if not input_file.exists():
         print(f' {input_file} not found')
+        print(f'Expected: {input_file}')
+        print(f'Available: {list(input_dir.glob("*")) if input_dir.exists() else "input_dir not found"}')
         sys.exit(1)
 
+    print(f'[TIRA] Input: {input_file}')
+    print(f'[TIRA] Output: {output_file}')
     print('[TIRA] Initializing...')
+    
     init_models()
     corpus = LocalCorpus(cache_size=50_000)
     pipeline = EFSGPipeline(corpus)
@@ -610,16 +618,22 @@ def main():
     with open(input_file, 'r', encoding='utf-8') as f_in, \
          open(output_file, 'w', encoding='utf-8') as f_out:
         for i, line in enumerate(f_in, 1):
-            if not line.strip(): continue
+            if not line.strip(): 
+                continue
             try:
                 topic = TopicJSON(**json.loads(line))
+                print(f'\n[{i}] {topic.topic_id}')
                 report = pipeline.run(topic)
                 f_out.write(json.dumps(report, ensure_ascii=False) + '\n')
                 f_out.flush()
             except Exception as e:
-                print(f' Topic {i}: {e}')
+                print(f'❌ Topic {i}: {e}')
+                import traceback
+                traceback.print_exc()
 
-    print(f'✓ Output: {output_file}')
+    print(f'\n✓ Output: {output_file}')
+    print(f'✓ File exists: {output_file.exists()}')
+    print(f'✓ File size: {output_file.stat().st_size if output_file.exists() else 0} bytes')
 
 if __name__ == '__main__':
     main()
