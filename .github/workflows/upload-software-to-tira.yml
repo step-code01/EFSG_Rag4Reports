@@ -35,6 +35,7 @@ jobs:
       - name: Build, test, and upload
         env:
           GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
           tira-cli login --token ${{ secrets.TIRA_CLIENT_TOKEN }}
           tira-cli verify-installation
