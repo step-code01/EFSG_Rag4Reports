@@ -33,6 +33,8 @@ jobs:
           pip3 install tira
 
       - name: Build, test, and upload
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
         run: |
           tira-cli login --token ${{ secrets.TIRA_CLIENT_TOKEN }}
           tira-cli verify-installation
