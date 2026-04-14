@@ -48,4 +48,4 @@ jobs:
           tira-cli code-submission \
             --path ${{ inputs.directory }} \
             --task rag4reports \
-            --dataset rag4reports/task-b-report-generation
+            --dataset rag4reports/task-b-report-generation-20260403-training
