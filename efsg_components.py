@@ -1,6 +1,6 @@
 """
 EFSG Pipeline Components
-Extracted from: efsg_pipeline_v3_1_efsg006(duplicates)_c7fix.ipynb
+Experimental notebook version: efsg_pipeline_v3.1_efsg006(duplicates)_c7fix.ipynb
 """
 
 import os
