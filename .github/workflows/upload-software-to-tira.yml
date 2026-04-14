@@ -33,8 +33,10 @@ jobs:
           pip3 install tira huggingface-hub
 
       - name: Login to HuggingFace
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          huggingface-cli login --token ${{ secrets.HF_TOKEN }} --add-to-git-credentials
+          python -c "from huggingface_hub import login; login(token='${{ secrets.HF_TOKEN }}')"
 
       - name: Build, test, and upload
         env:
