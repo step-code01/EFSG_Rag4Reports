@@ -1,0 +1,42 @@
+name: TIRA Code Submission
+
+on:
+  workflow_dispatch:
+    inputs:
+      directory:
+        description: 'Directory containing submission (. for root)'
+        required: true
+        default: '.'
+
+jobs:
+  submit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+
+      - name: Install TIRA CLI
+        run: |
+          python -m pip install --upgrade pip
+          pip3 install tira
+
+      - name: Build, test, and upload
+        run: |
+          tira-cli login --token ${{ secrets.TIRA_CLIENT_TOKEN }}
+          tira-cli verify-installation
+          tira-cli code-submission \
+            --path ${{ inputs.directory }} \
+            --task rag4reports \
+            --dataset rag4reports/task-a-report-evaluation-20260209-training

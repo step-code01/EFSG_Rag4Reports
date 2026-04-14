@@ -1,0 +1,21 @@
+argparse
+
+# Core LLM & Embeddings
+groq>=0.4.1
+sentence-transformers>=2.6.0
+transformers>=4.30.0
+
+# Data & ML
+torch>=2.0.0
+numpy>=1.24
+scikit-learn>=1.4.0
+datasets>=2.14
+
+# Utilities
+pydantic>=2.0
+requests>=2.31
+tqdm>=4.66
+huggingface_hub>=0.16
+
+# TIRA integration
+tira>=0.0.81
