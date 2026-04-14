@@ -1,23 +1,14 @@
-FROM nvidia/cuda:11.8.0-runtime-ubuntu22.04
+FROM python:3.10-slim
 
 WORKDIR /workspace
 
-# Install Python and system deps
-RUN apt-get update && apt-get install -y \
-    python3.10 \
-    python3-pip \
-    git \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git && rm -rf /var/lib/apt/lists/*
 
-# Upgrade pip
-RUN pip install --upgrade pip
-
-# Copy and install Python dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -q -r requirements.txt
 
-# Copy code
-COPY . .
+COPY script.py .
 
-# Entry point
-ENTRYPOINT ["python3", "script.py"]
+ENV GROQ_API_KEY=""
+
+ENTRYPOINT ["python", "script.py"]
